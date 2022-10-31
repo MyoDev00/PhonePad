@@ -1,17 +1,18 @@
-﻿using System.Text;
+﻿using OldPhonePad.IServices;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OldPhonePad.Services
 {
-    public class OldPhonePadServices
+    public class OldPhonePadServices:IOldPhonePadServices
     {
-        public static bool ValidateInput(string input)
+        public bool ValidateInput(string keyInput)
         {
             Regex regex = new Regex(@"^[0-9\s\*]*#$");
-            Match match = regex.Match(input);
+            Match match = regex.Match(keyInput);
             return match.Success;
         }
-        public static string OldPhonePad(string input)
+        public string ConvertKeyAsAlphabetic(string keyInput)
         {
             #region initialize
             Dictionary<char, char[]> numToCharMap = new Dictionary<char, char[]>();
@@ -32,7 +33,7 @@ namespace OldPhonePad.Services
             int queueCount = 0;
             #endregion
 
-            foreach (char item in input)
+            foreach (char item in keyInput)
             {
                 #region input => #
                 if (item == '#')
@@ -107,7 +108,7 @@ namespace OldPhonePad.Services
             return alphabeticBuilder.ToString();
         }
 
-        public static int ConvertCountToIndex(int length, int count)
+        private int ConvertCountToIndex(int length, int count)
         {
             int mod = count % length;
             return (mod == 0 ? length : mod) - 1;

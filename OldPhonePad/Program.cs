@@ -1,6 +1,8 @@
-﻿using OldPhonePad.Services;
+﻿using OldPhonePad.IServices;
+using OldPhonePad.Services;
 
 string userInput = "";
+IOldPhonePadServices oldPhonePadServices = new OldPhonePadServices();
 do
 {
     Console.WriteLine("Enter input =>");
@@ -8,10 +10,10 @@ do
 
     if (!string.IsNullOrEmpty(userInput))
     {
-        if (OldPhonePadServices.ValidateInput(userInput))
+        if (oldPhonePadServices.ValidateInput(userInput))
         {
             string alphabeticLetter = "";
-            alphabeticLetter = OldPhonePadServices.OldPhonePad(userInput);
+            alphabeticLetter = oldPhonePadServices.ConvertKeyAsAlphabetic(userInput);
 
             Console.WriteLine("Alphabetic Letter => ");
             Console.WriteLine(alphabeticLetter);
