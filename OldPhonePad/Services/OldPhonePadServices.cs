@@ -6,6 +6,27 @@ namespace OldPhonePad.Services
 {
     public class OldPhonePadServices: IOldPhonePadServices
     {
+        private Dictionary<char, char[]> NumToCharMap;
+        public OldPhonePadServices()
+        {
+            NumToCharMap = new Dictionary<char, char[]>();
+            NumToCharMap.Add('0', new[] { ' ' });
+            NumToCharMap.Add('1', new[] { '&', '\'', '(' });
+            NumToCharMap.Add('2', new[] { 'A', 'B', 'C' });
+            NumToCharMap.Add('3', new[] { 'D', 'E', 'F' });
+            NumToCharMap.Add('4', new[] { 'G', 'H', 'I' });
+            NumToCharMap.Add('5', new[] { 'J', 'K', 'L' });
+            NumToCharMap.Add('6', new[] { 'M', 'N', 'O' });
+            NumToCharMap.Add('7', new[] { 'P', 'Q', 'R', 'S' });
+            NumToCharMap.Add('8', new[] { 'T', 'U', 'V' });
+            NumToCharMap.Add('9', new[] { 'W', 'X', 'Y', 'Z' });
+        }
+
+        public Dictionary<char, char[]> GetNumToCharMap()
+        {
+            return NumToCharMap;
+        }
+
         public bool ValidateInput(string input)
         {
             Regex regex = new Regex(@"^[0-9\s\*]+#$");
@@ -15,18 +36,7 @@ namespace OldPhonePad.Services
         public string ConvertKeyAsAlphabetic(string input)
         {
             #region initialize
-            Dictionary<char, char[]> numToCharMap = new Dictionary<char, char[]>();
-            numToCharMap.Add('0', new[] { ' ' });
-            numToCharMap.Add('1', new[] { '&', '\'', '(' });
-            numToCharMap.Add('2', new[] { 'A', 'B', 'C' });
-            numToCharMap.Add('3', new[] { 'D', 'E', 'F' });
-            numToCharMap.Add('4', new[] { 'G', 'H', 'I' });
-            numToCharMap.Add('5', new[] { 'J', 'K', 'L' });
-            numToCharMap.Add('6', new[] { 'M', 'N', 'O' });
-            numToCharMap.Add('7', new[] { 'P', 'Q', 'R', 'S' });
-            numToCharMap.Add('8', new[] { 'T', 'U', 'V' });
-            numToCharMap.Add('9', new[] { 'W', 'X', 'Y', 'Z' });
-
+            
             StringBuilder alphabeticBuilder = new StringBuilder();
 
             char? queue = null;
@@ -41,7 +51,7 @@ namespace OldPhonePad.Services
                     if (queueCount == 0)
                         return alphabeticBuilder.ToString();
 
-                    var map = numToCharMap[queue.Value];
+                    var map = NumToCharMap[queue.Value];
                     int actualIndex = ConvertCountToIndex(map.Length, queueCount);
 
                     alphabeticBuilder.Append(map[actualIndex]);
@@ -70,7 +80,7 @@ namespace OldPhonePad.Services
                     if (queueCount == 0)
                         continue;
 
-                    var map = numToCharMap[queue.Value];
+                    var map = NumToCharMap[queue.Value];
                     int actualIndex = ConvertCountToIndex(map.Length, queueCount);
 
                     alphabeticBuilder.Append(map[actualIndex]);
@@ -89,7 +99,7 @@ namespace OldPhonePad.Services
                         continue;
                     }
 
-                    var map = numToCharMap[queue.Value];
+                    var map = NumToCharMap[queue.Value];
                     int actualIndex = ConvertCountToIndex(map.Length, queueCount);
 
                     alphabeticBuilder.Append(map[actualIndex]);
@@ -107,11 +117,11 @@ namespace OldPhonePad.Services
 
             return alphabeticBuilder.ToString();
         }
-
         private int ConvertCountToIndex(int length, int count)
         {
             int mod = count % length;
             return (mod == 0 ? length : mod) - 1;
         }
+
     }
 }
