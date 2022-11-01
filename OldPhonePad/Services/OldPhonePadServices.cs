@@ -8,7 +8,7 @@ namespace OldPhonePad.Services
     {
         public bool ValidateInput(string input)
         {
-            Regex regex = new Regex(@"^[0-9\s\*]*#$");
+            Regex regex = new Regex(@"^[0-9\s\*]+#$");
             Match match = regex.Match(input);
             return match.Success;
         }
