@@ -29,6 +29,7 @@ namespace OldPhonePad.Services
 
         public bool ValidateInput(string input)
         {
+            //one or more than character 0-9 or * and must end with #
             Regex regex = new Regex(@"^[0-9\s\*]+#$");
             Match match = regex.Match(input);
             return match.Success;
@@ -39,12 +40,17 @@ namespace OldPhonePad.Services
             
             StringBuilder alphabeticBuilder = new StringBuilder();
 
+            //temporary store one character form input
             char? queue = null;
+            //queue character count
             int queueCount = 0;
             #endregion
 
             foreach (char item in input)
             {
+                //if item is #, reach end of string,
+                //if no key in queue, return result
+                //other wise, convert queue key to alphabetic and return result
                 #region input => #
                 if (item == '#')
                 {
@@ -53,12 +59,15 @@ namespace OldPhonePad.Services
 
                     var map = NumToCharMap[queue.Value];
                     int actualIndex = ConvertCountToIndex(map.Length, queueCount);
-
+                    
                     alphabeticBuilder.Append(map[actualIndex]);
                     return alphabeticBuilder.ToString();
                 }
                 #endregion
 
+                //if item is *, it will do backspace action
+                //if no key in queue and there has previous converted charactes, remove last character from builder
+                //if there has key in queue ,no need to convert to alphabetic, just remove key from queue and reset count
                 #region input => *
                 if (item == '*')
                 {
@@ -74,6 +83,9 @@ namespace OldPhonePad.Services
                 }
                 #endregion
 
+                //if item is white space,it is assume as waiting second and convert queue key to alphabetic
+                //if no key in queue, no action needed and move to next key
+                //if key in queue, convert it then reset queue and queueCount
                 #region input => white space
                 if (item == ' ')
                 {
@@ -90,6 +102,10 @@ namespace OldPhonePad.Services
                 }
                 #endregion
 
+                //if item is between 0 to 9, add to queue or convert to alphabetic
+                //if queue is empty, add item to queue and set queueCount 1
+                //if item is same as queue, increase queue Count 
+                //otherwise, convert queue key to alphabetic and set item in queue
                 #region input => 0 to 9
                 if (queue.HasValue)
                 {
@@ -117,6 +133,17 @@ namespace OldPhonePad.Services
 
             return alphabeticBuilder.ToString();
         }
+        /// <summary>
+        /// Converts the character count to get mapping index.
+        /// </summary>
+        /// <example>
+        /// map=["A","B","C"];
+        /// key="1111";
+        /// Length of map is 3 key count is 4,so count to index will be 0;
+        /// </remark>
+        /// <param name="length">The length of mapping char array.</param>
+        /// <param name="count">The count of the key.</param>
+        /// <returns>System.Int32.</returns>
         private int ConvertCountToIndex(int length, int count)
         {
             int mod = count % length;
