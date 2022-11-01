@@ -4,15 +4,15 @@ using System.Text.RegularExpressions;
 
 namespace OldPhonePad.Services
 {
-    public class OldPhonePadServices:IOldPhonePadServices
+    public class OldPhonePadServices: IOldPhonePadServices
     {
-        public bool ValidateInput(string keyInput)
+        public bool ValidateInput(string input)
         {
             Regex regex = new Regex(@"^[0-9\s\*]*#$");
-            Match match = regex.Match(keyInput);
+            Match match = regex.Match(input);
             return match.Success;
         }
-        public string ConvertKeyAsAlphabetic(string keyInput)
+        public string ConvertKeyAsAlphabetic(string input)
         {
             #region initialize
             Dictionary<char, char[]> numToCharMap = new Dictionary<char, char[]>();
@@ -33,7 +33,7 @@ namespace OldPhonePad.Services
             int queueCount = 0;
             #endregion
 
-            foreach (char item in keyInput)
+            foreach (char item in input)
             {
                 #region input => #
                 if (item == '#')
