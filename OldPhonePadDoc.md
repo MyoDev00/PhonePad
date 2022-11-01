@@ -1,4 +1,4 @@
-<h1>Class OldPhonePadServices </h1>
+<h1>Interface IOldPhonePadServices </h1>
   <ul>
     <li>Turn any keypad input into alphabetical letters</li>
   </ul>
@@ -85,12 +85,29 @@
 </ul>
 <h2>Methods</h2>
 
+
+<h3>GetNumToCharMap()</h3>
+<span>Get numbers and characters map.</span>
+
+#####
+
+    public Dictonary<char, char[]> GetNumToCharMap();
+
+<h4>Parameters</h4>
+
+#####
+
+<h4>Return</h4>
+<a href="https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2?view=net-6.0">Dictionary&lt;char,char[]&gt;</a>
+
+----
+
 <h3>ValidateInput(string )</h3>
 <span>Validate the user input against the key mapping.<br>Input string must contain only action keys, number keys and must end with an action key ( # ).</span>
 
 #####
 
-    public static bool ValidateInput(string input);
+    public bool ValidateInput(string input);
 
 <h4>Parameters</h4>
 
@@ -104,7 +121,7 @@ The string for user input.
 
 ----
 
-<h3>OldPhonePad(string )</h3>
+<h3>ConvertKeyAsAlphabetic(string )</h3>
 <span>Transform keypad input into alphabetical letters according to key mapping.<br/>
 Input between `[0-9]` will compute a letter via a circle through the key mapping.<br/>
 The input "*" will be translated as backspace and delete the previous letter from the sequence.<br/>
@@ -114,7 +131,7 @@ The input " "(WhiteSpace) is used as a pause, to type two characters from after 
 
 #####
 
-    public static string OldPhonePad(string input)
+    public string ConvertKeyAsAlphabetic(string input)
 
 <h4>Parameters</h4>
 
@@ -129,15 +146,17 @@ The string for user input.
 <h4>Example</h4>
 
 #####
+    using OldPhonePad.IServices;
     using OldPhonePad.Services;
     
+    IOldPhonePadServices oldPhonePadServices = new OldPhonePadServices();
     string userInput = "222 2 8#"
-    var alphabeticLetter = OldPhonePadServices.OldPhonePad(userInput);
+    var alphabeticLetter = oldPhonePadServices.ConvertKeyAsAlphabetic(userInput);
     Console.WriteLine(alphabeticLetter);
     //Output => CAT
     
     userInput = “4433555 555666#”;
-    alphabeticLetter = OldPhonePadServices.OldPhonePad(userInput);
+    alphabeticLetter = oldPhonePadServices.ConvertKeyAsAlphabetic(userInput);
     Console.WriteLine(alphabeticLetter);
     //Output => HELLO
     
